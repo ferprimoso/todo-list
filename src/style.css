@@ -42,6 +42,9 @@ li {
 }
 
 .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     height: 100%;
     background-color: var(--white);
@@ -56,4 +59,96 @@ li {
     align-items: center;
     text-align: center;
     width: 100%;
+}
+
+.main-title {
+    font-size: 4rem;
+    text-align: center;
+}
+
+.card {
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 4rem;
+    border-left: 4px solid none;
+    margin-bottom: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.card .checkbox {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 1rem;
+}
+
+.card .card-title {
+    display: inline-block;
+}
+
+.red-border {
+    border-left: 4px solid red;
+}
+
+.yellow-border {
+    border-left: 4px solid yellow;
+}
+
+.green-border {
+    border-left: 4px solid green;
+}
+
+.btn-add {
+    right: 4rem;
+    bottom: 2rem;
+    position: absolute;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: var(--purple-color);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 4rem;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.btn-add:hover {
+    transform: scale(1.1)
+}
+
+.modal.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 500px;
+    background-color: var(--grey);
+    max-width: 80%;
+    z-index: 10;
+    border-radius: 10px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+input {
+    margin-bottom: 0.5rem;
+}
+
+
+input[name = 'task-description'] {
+    height: 2rem;
 }
