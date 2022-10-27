@@ -101,6 +101,7 @@ li {
 }
 
 .btn-add {
+    cursor: pointer;
     right: 4rem;
     bottom: 2rem;
     position: absolute;
@@ -128,6 +129,7 @@ li {
     position: fixed;
     top: 50%;
     left: 50%;
+    transition: 200ms ease-in-out;
     transform: translate(-50%, -50%) scale(0);
     width: 500px;
     background-color: var(--grey);
@@ -136,12 +138,50 @@ li {
     border-radius: 10px;
 }
 
+#overlay {
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+#overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+
 .form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 1rem;
+}
+
+.modal-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.modal-header h1 {
+    margin-right: 8.5rem;
+}
+
+.close-btn {
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 2.5rem;
+    font-weight: bold;
 }
 
 input {

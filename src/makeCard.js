@@ -1,4 +1,4 @@
-class makeCard {
+class Card {
     constructor(title, description, dueDate, priority, check) {
         this.title = title;
         this.description = description;
@@ -7,3 +7,5 @@ class makeCard {
         this.check = check;
     }
 }
+
+export {Card};

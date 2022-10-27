@@ -1,15 +1,22 @@
+import {defaultCardList, newCard, addCard} from './cardManager.js';
+import { compareAsc, format } from 'date-fns'
+
+
+
 export default function startTodoApp() {
     const body = document.querySelector('body');
 
     body.appendChild(makeHeader());
     body.appendChild(makeFlexContainer());
+    body.appendChild(makeOverlay());
     body.appendChild(makeFooter());
 
     const main = document.querySelector('.main');
     main.appendChild(makeHome());
-    main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', description : 'room cleaning bla bla bla i have to', priority:'high', check: false}));
-    main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'medium', check: true}));
-    main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'low', check: true}));
+    // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', description : 'room cleaning bla bla bla i have to', priority:'high', check: false}));
+    // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'medium', check: true}));
+    // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'low', check: true}));
+    refreshCards();
 
     body.appendChild(makeForm());
 
@@ -62,10 +69,17 @@ function makeMain() {
 
 function openModal() {
     const modal = document.querySelector('.modal');
-
+    const overlay = document.querySelector('#overlay');
+    overlay.classList.add('active');
     modal.classList.add('active');
 }
 
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    const overlay = document.querySelector('#overlay');
+    overlay.classList.remove('active');
+    modal.classList.remove('active');
+}
 
 
 function createListElement(text) {
@@ -74,7 +88,13 @@ function createListElement(text) {
     return li;
 }
 
+function makeOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'overlay';
+    overlay.addEventListener('click', () => closeModal());
 
+    return overlay
+}
 
 function makeFooter() {
     const footer = document.createElement('div');
@@ -99,19 +119,27 @@ function makeHome() {
     return title;
 }
 
+function refreshCards() {
+    const main = document.querySelector('.main');
+    defaultCardList.forEach(card => {
+        main.appendChild(makeCard(card));
+    });
+}
 
-function makeCard({title, description, dueDate, priority, check}) {
+
+function makeCard(Card) {
+    console.log(Card);
     const card = document.createElement('div');
     card.classList.add('card');
 
     const t = document.createElement('h2');
     t.classList.add('card-title');
-    t.textContent = title;
+    t.textContent = Card.title;
     const c = document.createElement('input');
     c.type = 'checkbox';
     c.name = 'check';
     c.classList.add('checkbox');
-    check === true ? c.checked = true : c.checked = false;
+    Card.check === true ? c.checked = true : c.checked = false;
 
     const divCheckTitle = document.createElement('div');
     divCheckTitle.appendChild(c);
@@ -119,13 +147,14 @@ function makeCard({title, description, dueDate, priority, check}) {
 
     const d = document.createElement('h2');
     d.classList.add('card-date');
-    d.textContent = dueDate;
+    console.log(format (new Date (Date.parse(Card.dueDate)), 'd MMMM'));
+    d.textContent = format (new Date (Date.parse(Card.dueDate)), 'd MMMM');
 
     const dsc = document.createElement('p');
     dsc.classList.add('card-description');
-    dsc.textContent = description;
+    dsc.textContent = Card.description;
 
-    switch (priority) {
+    switch (Card.priority) {
         case 'high':
             card.classList.add('red-border');
             break
@@ -158,7 +187,21 @@ function makeForm() {
     const title = document.createElement('h1');
     title.textContent = 'Add Task';
 
-    form.appendChild(title);
+    const closebtn = document.createElement('button');
+    closebtn.classList.add('close-btn');
+    closebtn.textContent = 'x';
+    closebtn.addEventListener('click',function(event){
+        event.preventDefault();
+        closeModal();
+    });
+
+    const modalheader = document.createElement('div');
+    modalheader.appendChild(title);
+    modalheader.appendChild(closebtn);
+    modalheader.classList.add('modal-header')
+
+
+    form.appendChild(modalheader);
     form.appendChild(addFormInput('text','task-name', 'Task Name'));
     form.appendChild(addFormInput('text','task-description', 'Description'));
     form.appendChild(addFormInput('date','date', 'Date'));
@@ -166,6 +209,13 @@ function makeForm() {
     const s = document.createElement("input");
     s.setAttribute("type", "submit");
     s.setAttribute("value", "Submit");
+    s.addEventListener('click', function(event) {
+        event.preventDefault();
+        const card = addCard(defaultCardList, newCard(form[1].value, form[2].value, form[3].value, 'high', false));
+        refreshCards(card);
+        console.log(defaultCardList);
+        closeModal();
+    })
     form.appendChild(s);
 
     modal.appendChild(form);
