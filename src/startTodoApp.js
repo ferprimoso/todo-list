@@ -13,6 +13,7 @@ export default function startTodoApp() {
 
     const main = document.querySelector('.main');
     main.appendChild(makeHome());
+    main.appendChild(makeCardContainer());
     // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', description : 'room cleaning bla bla bla i have to', priority:'high', check: false}));
     // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'medium', check: true}));
     // main.appendChild(makeCard({title: 'clean room', dueDate: '19 nov', priority:'low', check: true}));
@@ -56,7 +57,7 @@ function makeSideBar() {
 
 function makeMain() {
     const main = document.createElement('div');
-    main.classList.add('main')
+    main.classList.add('main');
 
     const addButton = document.createElement('button');
     addButton.classList.add('btn-add');
@@ -109,20 +110,25 @@ function makeFooter() {
     return footer;
 }
 
+function makeCardContainer() {
+    const cardContainer = document.createElement('div');
+    cardContainer.classList.add('card-container');
+    return cardContainer;
+}
 
 function makeHome() {
     const title = document.createElement('h1');
     title.classList.add('main-title');
     title.textContent = 'Home';
 
-
     return title;
 }
 
 function refreshCards() {
-    const main = document.querySelector('.main');
+    const cardContainer = document.querySelector('.card-container');
+    cardContainer.innerHTML = '';
     defaultCardList.forEach(card => {
-        main.appendChild(makeCard(card));
+        cardContainer.appendChild(makeCard(card));
     });
 }
 
@@ -206,12 +212,39 @@ function makeForm() {
     form.appendChild(addFormInput('text','task-description', 'Description'));
     form.appendChild(addFormInput('date','date', 'Date'));
 
+    const priorityLabel = document.createElement('label');
+    priorityLabel.setAttribute('for', 'priority');
+    priorityLabel.textContent('Priority:');
+
+    const prioritySelect = document.createElement('select');
+    prioritySelect.setAttribute('name', 'priority');
+    prioritySelect.setAttribute('id', 'priority');
+
+    const priorityLow = document.createElement('option');
+    priorityLow.setAttribute('value', 'low');
+    priorityLow.textContent = 'Low';
+
+    const priorityMedium = document.createElement('option');
+    priorityMedium.setAttribute('value', 'medium');
+    priorityMedium.textContent = 'Medium';
+
+    const priorityHigh = document.createElement('option');
+    priorityHigh.setAttribute('value', 'high');
+    priorityHigh.textContent = 'High';
+
+    prioritySelect.appendChild(priorityLow);
+    prioritySelect.appendChild(priorityMedium);
+    prioritySelect.appendChild(priorityHigh);
+
+    form.appendChild(priorityLabel);
+    form.appendChild(prioritySelect);
+
     const s = document.createElement("input");
     s.setAttribute("type", "submit");
     s.setAttribute("value", "Submit");
     s.addEventListener('click', function(event) {
         event.preventDefault();
-        const card = addCard(defaultCardList, newCard(form[1].value, form[2].value, form[3].value, 'high', false));
+        const card = addCard(defaultCardList, newCard(form[1].value, form[2].value, form[3].value, false));
         refreshCards(card);
         console.log(defaultCardList);
         closeModal();
